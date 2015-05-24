@@ -1,14 +1,30 @@
+/**
+ * Registers input handlers to the canvas (including removing the double-click
+ * to select text).
+ *
+ * Exports two methods:
+ *   - getKeysDown()
+ *      returns a dictionary of string to boolean
+ *          the string is an uppercase character
+ *          boolean is whether that key is currently being held
+ *          any key not in the dictinoary is not being held
+ *   - setClickHandler(handler)
+ *      sets the handler to be called when the mouse is clicked
+ *          handler is a function(x, y), where x and y are based on percentages
+ *          of the canvas (e.g., 0.5, 0.5 is a click to the middle of the
+ *          canvas).
+ */
+
 var PS = PS || {};
 
 (function() {
     var SINGLE_CLICK = 1;
     var TAB_KEY_CODE = 9;
 
-    var clamp = function(val, min, max) {
-        return Math.min(max, Math.min(max, val));
-    }
+    PS.registerInput = function(canvas) {
+        var onClick = null;
+        var keysDown = {};
 
-    PS.registerInput = function(canvas, onClick, onKey) {
         $(canvas).mousedown(function(data) {
             // We do this to avoid double click selecting text.
             canvas.focus();
@@ -16,6 +32,9 @@ var PS = PS || {};
         });
 
         $(canvas).click(function(data) {
+            if (!onClick)
+                return;
+
             data.preventDefault();
             if (data.which !== SINGLE_CLICK)
                 return;
@@ -26,7 +45,7 @@ var PS = PS || {};
             var x = 1.0 * dx / canvas.width,
                 y = 1.0 * dy / canvas.height;
 
-            onClick(clamp(x, 0, 1), clamp(y, 0, 1));
+            onClick(PS.util.clamp01(x), PS.util.clamp01(y));
         });
 
         $(canvas).keydown(function(data) {
@@ -34,10 +53,28 @@ var PS = PS || {};
             if (key == TAB_KEY_CODE)
                 data.preventDefault();
 
-            var str = String.fromCharCode(key);
+            var str = String.fromCharCode(key).trim();
 
             if (str !== "")
-                onKey(str);
+                keysDown[str] = true;
         });
+
+        $(canvas).keyup(function(data) {
+            var key = data.which || data.keyCode;
+            var str = String.fromCharCode(key).trim();
+
+            if (str !== "")
+                keysDown[str] = false;
+        });
+
+        return {
+            getKeysDown: function() {
+                return keysDown;
+            },
+
+            setClickHandler: function(handler) {
+                onClick = handler;
+            }
+        };
     };
 })();

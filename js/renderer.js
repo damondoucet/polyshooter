@@ -1,4 +1,4 @@
-/*
+/**
  * The renderer guarantees the same aspect ratio (4:3) no matter the screen
  * size.
  *
@@ -10,6 +10,8 @@
  * y-coordinates should be given as a percent of the height.
  * sizes (e.g. radii) should be given as a percent of the height.
  */
+
+// TODO(ddoucet): should it be black on white or white on black?
 
 var PS = PS || {};
 
@@ -99,6 +101,16 @@ var PS = PS || {};
                 for (var i = 1, len = sides; i < len; i++)
                     context.lineTo(points[i].x, points[i].y);
                 context.fill();
+            },
+
+            // for clamping the player
+            clampCircle: function(centerX, centerY, radius) {
+                var minX = radius / WIDTH_TO_HEIGHT_RATIO;
+                var maxX = 1 - minX;
+
+                var x = PS.util.clamp(centerX, minX, maxX);
+                var y = PS.util.clamp(centerY, radius, 1 - radius);
+                return {x: x, y: y};
             },
         };
     };
