@@ -1,0 +1,26 @@
+html, body {
+    margin: 0px;
+}
+
+body {
+    background-color: #aaa;
+}
+
+h1 {
+    font-family: sans-serif;
+    color: #333;
+}
+
+div#game-wrapper {
+    text-align: center;
+}
+
+canvas#game {
+    display: inline-block;
+    background-color: white;
+    border: #777 2px solid;
+}
+
+h1#unsupported-browser {
+    font-color: red;
+}
