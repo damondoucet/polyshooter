@@ -22,5 +22,14 @@ $(function() {
             setTimeout(draw, 1000);
     };
 
+    // TODO(ddoucet): game manager should expose these
+    var onClick = function(x, y) {
+        console.log("Click: " + x + "," + y);
+    };
+    var onKey = function(key) {
+        console.log("Key: " + key);
+    };
+    PS.registerInput(canvas, onClick, onKey);
+
     draw();
 });
