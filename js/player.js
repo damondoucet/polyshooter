@@ -15,7 +15,7 @@ var PS = PS || {};
         "D": {x: MOVEMENT, y: 0}
     };
 
-    PS.createPlayer = function(renderer) {
+    PS.createPlayer = function(renderer, bulletFactory) {
         var centerX = 0.5,
             centerY = 0.5;
 
@@ -37,7 +37,8 @@ var PS = PS || {};
             },
 
             handleClick: function(x, y) {
-                console.log("Click: " + x + "," + y);
+                var angle = Math.atan2(y - centerY, x - centerX);
+                bulletFactory.createBullet(centerX, centerY, RADIUS, angle)
             },
 
             render: function() {

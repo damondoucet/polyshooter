@@ -6,28 +6,34 @@
 var PS = PS || {};
 
 (function() {
-    var BULLET_VELOCITY = 1;  // TODO(ddoucet)
-
     PS.createGameState = function(renderer) {
         var lastTime = null;
 
-        var player = PS.createPlayer(renderer);
         var bullets = [];
         var monsters = [];
 
-        var createBullet = function(centerX, centerY, angle) {
-            // TODO(ddoucet)
+        var addBullet = function(bullet) {
+            console.log("hi");
+            bullets.push(bullet);
         }
+
+        var bulletFactory = PS.createBulletFactory(addBullet, renderer);
+        var player = PS.createPlayer(renderer, bulletFactory);
 
         return {
             player: player,
 
             update: function(deltaTime) {
+                for (var i = 0, len = bullets.length; i < len; i++)
+                    bullets[i].update(deltaTime);
             },
 
             render: function() {
                 renderer.reset();
+                console.log(bullets);
                 player.render();
+                for (var i = 0, len = bullets.length; i < len; i++)
+                    bullets[i].render();
             }
         };
     };

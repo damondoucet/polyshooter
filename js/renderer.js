@@ -13,6 +13,11 @@
 
 // TODO(ddoucet): should it be black on white or white on black?
 
+// TODO(ddoucet): this is starting to get a little big.
+// may want to refactor into a Canvas obj which handles all
+// of the aspect ratio, bounds checking, etc, and this just handles
+// actually drawing to the context
+
 var PS = PS || {};
 
 (function() {
