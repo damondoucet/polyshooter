@@ -70,17 +70,31 @@ var PS = PS || {};
 
         var bulletFactory = PS.createBulletFactory(bulletManager, renderer);
         var player = PS.createPlayer(renderer, bulletFactory);
+        var monsterFactory = PS.createMonsterFactory(player, monsterManager, renderer);
 
+        var tot = 0;
+        var prevtot = 0;
         return {
             player: player,
 
             update: function(deltaTime) {
+                tot += deltaTime;
+                if (tot > 1000 && prevtot < 1000)
+                    monsterFactory.create(3, 0.001, 0.1, 0.1);
+                else if (tot > 1500 && prevtot < 1500)
+                    monsterFactory.create(4, 0.002, 0.9, 0.1);
+                else if (tot > 2000 && prevtot < 2000)
+                    monsterFactory.create(5, 0.003, 0.9, 0.9);
+                prevtot = tot;
+
                 bulletManager.update(deltaTime);
+                monsterManager.update(deltaTime);
             },
 
             render: function() {
                 renderer.reset();
                 bulletManager.render();
+                monsterManager.render();
                 player.render();
             }
         };

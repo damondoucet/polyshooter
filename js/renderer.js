@@ -43,7 +43,7 @@ var PS = PS || {};
 
             for (var i = 0; i < sides; i++) {
                 var angle = orientation + i * 2*Math.PI / sides;
-                points.push(gameCenterRadiusAngleToCanvasWrapperPoint(
+                points.push(gameCenterRadiusAngleToCanvasPoint(
                     centerX, centerY, radius, angle));
             }
 
@@ -72,7 +72,7 @@ var PS = PS || {};
             },
 
             // The first point is at angle orientation (standard trig)
-            fillPolygon: function(centerX, centerY,
+            drawPolygon: function(centerX, centerY,
                     orientation, radius, sides) {
                 var points = createPolygonPoints(
                     centerX, centerY, orientation, radius, sides);
@@ -81,7 +81,8 @@ var PS = PS || {};
                 context.moveTo(points[0].x, points[0].y);
                 for (var i = 1, len = sides; i < len; i++)
                     context.lineTo(points[i].x, points[i].y);
-                context.fill();
+                context.closePath();
+                context.stroke();
             },
         };
     };
