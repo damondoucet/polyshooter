@@ -54,6 +54,16 @@ var PS = PS || {};
                 var y = PS.util.clamp(centerY, radius, 1 - radius);
                 return {x: x, y: y};
             },
+
+            // Whether the circle is fully outside of the bounds. Used for
+            // checking whether a bullet should be removed.
+            circleIsOutsideBounds: function(centerX, centerY, radius) {
+                var minX = -radius / WIDTH_TO_HEIGHT_RATIO;
+                var maxX = 1 - minX;
+
+                return centerX <= minX || centerX >= maxX ||
+                    centerY <= -radius || centerY >= 1 + radius;
+            }
         }
     }
 })();
