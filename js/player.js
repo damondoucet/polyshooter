@@ -20,6 +20,10 @@ var PS = PS || {};
             centerY = 0.5;
 
         return PS.player = {
+            x: function() { return centerX; },
+            y: function() { return centerY; },
+            radius: function() { return RADIUS; },
+
             handleKeys: function(keysDown) {
                 var keys = Object.keys(keysDown);
                 for (var i = 0, len = keys.length; i < len; i++) {
@@ -39,8 +43,13 @@ var PS = PS || {};
             },
 
             handleClick: function(x, y) {
-                var angle = Math.atan2(y - centerY, x - centerX);
-                bulletFactory.createBullet(centerX, centerY, RADIUS, angle)
+                var r = (RADIUS + bulletFactory.radius()),
+                    angle = Math.atan2(y - centerY, x - centerX);
+
+                var x = centerX + r * Math.cos(angle),
+                    y = centerY + r * Math.sin(angle);
+
+                bulletFactory.createBullet(x, y, angle);
             },
 
             render: function() {
