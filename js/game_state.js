@@ -70,7 +70,7 @@ var PS = PS || {};
 
         var bulletFactory = PS.createBulletFactory(bulletManager, renderer);
         var player = PS.createPlayer(renderer, bulletFactory);
-        var monsterFactory = PS.createMonsterFactory(player, monsterManager, renderer);
+        var monsterFactory = PS.createMonsterFactory(player, bulletManager, monsterManager, renderer);
 
         var tot = 0;
         var prevtot = 0;

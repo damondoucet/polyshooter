@@ -5,14 +5,34 @@ var PS = PS || {};
 // and monsters
 
 (function() {
-    var MONSTER_RADIUS = 0.08;
+    var RADIUS = 0.08;
 
-    PS.createMonsterFactory = function(player, monsterManager, renderer) {
+    PS.createMonsterFactory = function(
+            player, bulletManager, monsterManager, renderer) {
         var createMonster = function(sides, speed, centerX, centerY) {
             var angleToPlayer = function() {
                 // TODO(ddoucet): player needs to export this stuff
                 return Math.atan2(player.y() - centerY, player.x() - centerX);
             }
+
+            var findCollidingBullet = function() {
+                var bullets = bulletManager.get();
+                for (var i = 0, len = bullets.length; i < len; i++) {
+                    var b = bullets[i];
+                    if (PS.Polygons.circlePolygonCollide(
+                            b.x(), b.y(), b.radius(),
+                            centerX, centerY, angleToPlayer(), RADIUS, sides))
+                        return i;
+                }
+
+                return -1;
+            };
+
+            var collidesWithPlayer = function() {
+                return PS.Polygons.circlePolygonCollide(
+                    player.x(), player.y(), player.radius(),
+                    centerX, centerY, angleToPlayer(), RADIUS, sides);
+            };
 
             return {
                 update: function(monsterIndex, deltaTime) {
@@ -20,14 +40,26 @@ var PS = PS || {};
                     centerX += speed * Math.cos(angle);
                     centerY += speed * Math.sin(angle);
 
-                    // TODO(ddoucet): check for collision with player
+                    var bulletIndex = findCollidingBullet();
+                    if (bulletIndex != -1) {
+                        bulletManager.remove(bulletIndex);
+                        sides--;
+
+                        if (sides < 3) {
+                            monsterManager.remove(monsterIndex);
+                            return;
+                        }
+                    }
+
+                    if (collidesWithPlayer()) {
+                        PS.endGame();
+                    }
                 },
 
                 render: function() {
-                    // TODO(ddoucet): this might look better not filled? I think so
                     renderer.drawPolygon(
                         centerX, centerY,
-                        angleToPlayer(), MONSTER_RADIUS, sides);
+                        angleToPlayer(), RADIUS, sides);
                 }
             };
         };

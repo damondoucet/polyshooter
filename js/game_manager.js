@@ -11,6 +11,11 @@ var PS = PS || {};
     PS.gameOver = false;
     PS.kill = function() { PS.gameOver = true; };
 
+    PS.endGame = function() {
+        console.log("game over!");
+        PS.gameOver = true;
+    };
+
     PS.createGameManager = function(renderer, input) {
         var prevTime = null;
         var gameState = PS.createGameState(renderer);

@@ -21,6 +21,10 @@
                 var yUnit = Math.sin(angle);
 
                 var bullet = {
+                    x: function() { return centerX; },
+                    y: function() { return centerY; },
+                    radius: function() { return RADIUS; },
+
                     update: function(bulletIndex, deltaTime) {
                         centerX += xUnit * deltaTime * VELOCITY;
                         centerY += yUnit * deltaTime * VELOCITY;

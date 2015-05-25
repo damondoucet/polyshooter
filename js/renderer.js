@@ -17,38 +17,21 @@ var PS = PS || {};
 
 (function() {
     PS.createRenderer = function(canvasWrapper) {
-        // TODO(ddoucet): replace these with drawMonster, drawBullet, drawPlayer
-        // TODO(ddoucet): possibly use the word render instead of draw?
         context = canvasWrapper.getContext();
-
-        var gameCenterRadiusAngleToCanvasPoint = function(
-                centerX, centerY, radius, angle) {
-            // adjust coordinates
-            centerX *= canvasWrapper.width();
-            centerY *= canvasWrapper.height();
-            radius *= canvasWrapper.height();
-
-            var x = centerX + radius * Math.cos(angle),
-                y = centerY + radius * Math.sin(angle);
-
-            return {x: Math.round(x), y: Math.round(y)};
-        }
 
         var createPolygonPoints = function(
                 centerX, centerY, orientation, radius, sides) {
-            // The first point is at
-            // (centerX,centerY)+radius*(cos(O), sin(O)). Then, we add
-            // 360.0/sides to the orientation, and loop sides times.
+            var percentPoints = PS.Polygons.polygonPoints(
+                centerX, centerY, orientation, radius, sides);
+
             var points = [];
-
-            for (var i = 0; i < sides; i++) {
-                var angle = orientation + i * 2*Math.PI / sides;
-                points.push(gameCenterRadiusAngleToCanvasPoint(
-                    centerX, centerY, radius, angle));
-            }
-
+            for (var i = 0, len = percentPoints.length; i < len; i++)
+                points.push({
+                    x: percentPoints[i].x * canvasWrapper.width(),
+                    y: percentPoints[i].y * canvasWrapper.height()
+                });
             return points;
-        }
+        };
 
         return {
             canvasWrapper: function() { return canvasWrapper; },
