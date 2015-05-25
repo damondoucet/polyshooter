@@ -17,17 +17,19 @@ var PS = PS || {};
 
         input.setClickHandler(gameState.player.handleClick);
 
-        var gameLoop = function(time) {
+        var gameLoop = function() {
             if (PS.gameOver)
                 return;
+
+            var time = Date.now();
             if (!prevTime)
                 prevTime = time;
 
-            window.requestAnimationFrame(gameLoop);
-            gameState.player.handleKeys(input.getKeysDown());
+            gameState.player.handleKeys(input.getKeysDown(), time - prevTime);
             gameState.update(time - prevTime);
             gameState.render();
 
+            window.requestAnimationFrame(gameLoop);
             prevTime = time;
         };
 

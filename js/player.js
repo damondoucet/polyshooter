@@ -6,7 +6,7 @@ var PS = PS || {};
 
 (function() {
     var RADIUS = 0.05;
-    var MOVEMENT = 0.025;
+    var MOVEMENT = 0.001;
 
     var KEY_TO_DELTA = {
         "W": {x: 0, y: -MOVEMENT},
@@ -24,14 +24,14 @@ var PS = PS || {};
             y: function() { return centerY; },
             radius: function() { return RADIUS; },
 
-            handleKeys: function(keysDown) {
+            handleKeys: function(keysDown, deltaTime) {
                 var keys = Object.keys(keysDown);
                 for (var i = 0, len = keys.length; i < len; i++) {
                     var key = keys[i];
                     if (keysDown[key]) {
                         var delta = KEY_TO_DELTA[key] || {x: 0, y: 0};
-                        centerX += delta.x;
-                        centerY += delta.y;
+                        centerX += delta.x * deltaTime;
+                        centerY += delta.y * deltaTime;
                     }
                 }
 
