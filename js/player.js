@@ -31,7 +31,9 @@ var PS = PS || {};
                     }
                 }
 
-                var center = renderer.clampCircle(centerX, centerY, RADIUS);
+                var center = renderer
+                    .canvasWrapper()
+                    .clampCircle(centerX, centerY, RADIUS);
                 centerX = center.x;
                 centerY = center.y;
             },

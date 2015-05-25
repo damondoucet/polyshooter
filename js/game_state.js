@@ -13,7 +13,6 @@ var PS = PS || {};
         var monsters = [];
 
         var addBullet = function(bullet) {
-            console.log("hi");
             bullets.push(bullet);
         }
 
@@ -30,7 +29,6 @@ var PS = PS || {};
 
             render: function() {
                 renderer.reset();
-                console.log(bullets);
                 player.render();
                 for (var i = 0, len = bullets.length; i < len; i++)
                     bullets[i].render();

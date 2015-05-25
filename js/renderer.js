@@ -13,49 +13,20 @@
 
 // TODO(ddoucet): should it be black on white or white on black?
 
-// TODO(ddoucet): this is starting to get a little big.
-// may want to refactor into a Canvas obj which handles all
-// of the aspect ratio, bounds checking, etc, and this just handles
-// actually drawing to the context
-
 var PS = PS || {};
 
 (function() {
-    var WIDTH_TO_HEIGHT_RATIO = 4.0/3;
-    var WIDTH_FACTOR = 0.7, HEIGHT_FACTOR = 0.5;
-
-    PS.createRenderer = function(canvas) {
+    PS.createRenderer = function(canvasWrapper) {
         // TODO(ddoucet): replace these with drawMonster, drawBullet, drawPlayer
         // TODO(ddoucet): possibly use the word render instead of draw?
-        context = canvas.getContext("2d");
-        context.fillStyle = "rgb(0,0,0)";
-
-        var setCanvasSize = function(width, height) {
-            $(canvas).width(width);
-            $(canvas).height(height);
-
-            canvas.width = width;
-            canvas.height = height;
-        }
-
-        var resizeCanvas = function() {
-            var displayWidth = window.innerWidth * WIDTH_FACTOR,
-                displayHeight = window.innerHeight * HEIGHT_FACTOR;
-
-            if (displayWidth < displayHeight * WIDTH_TO_HEIGHT_RATIO)
-                displayHeight = displayWidth / WIDTH_TO_HEIGHT_RATIO;
-            else
-                displayWidth = displayHeight * WIDTH_TO_HEIGHT_RATIO;
-
-            setCanvasSize(displayWidth, displayHeight);
-        };
+        context = canvasWrapper.getContext();
 
         var gameCenterRadiusAngleToCanvasPoint = function(
                 centerX, centerY, radius, angle) {
             // adjust coordinates
-            centerX *= canvas.width;
-            centerY *= canvas.height;
-            radius *= canvas.height;
+            centerX *= canvasWrapper.width();
+            centerY *= canvasWrapper.height();
+            radius *= canvasWrapper.height();
 
             var x = centerX + radius * Math.cos(angle),
                 y = centerY + radius * Math.sin(angle);
@@ -72,7 +43,7 @@ var PS = PS || {};
 
             for (var i = 0; i < sides; i++) {
                 var angle = orientation + i * 2*Math.PI / sides;
-                points.push(gameCenterRadiusAngleToCanvasPoint(
+                points.push(gameCenterRadiusAngleToCanvasWrapperPoint(
                     centerX, centerY, radius, angle));
             }
 
@@ -80,16 +51,20 @@ var PS = PS || {};
         }
 
         return {
+            canvasWrapper: function() { return canvasWrapper; },
+
             reset: function() {
-                resizeCanvas();
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                canvasWrapper.reset();
+                context.clearRect(0, 0,
+                    canvasWrapper.width(),
+                    canvasWrapper.height());
             },
 
             fillCircle: function(centerX, centerY, radius) {
                 // adjust coordinates
-                centerX *= canvas.width;
-                centerY *= canvas.height;
-                radius *= canvas.height;
+                centerX *= canvasWrapper.width();
+                centerY *= canvasWrapper.height();
+                radius *= canvasWrapper.height();
 
                 context.beginPath();
                 context.arc(centerX, centerY, radius, 0, 2*Math.PI);
@@ -97,7 +72,8 @@ var PS = PS || {};
             },
 
             // The first point is at angle orientation (standard trig)
-            fillPolygon: function(centerX, centerY, orientation, radius, sides) {
+            fillPolygon: function(centerX, centerY,
+                    orientation, radius, sides) {
                 var points = createPolygonPoints(
                     centerX, centerY, orientation, radius, sides);
 
@@ -106,16 +82,6 @@ var PS = PS || {};
                 for (var i = 1, len = sides; i < len; i++)
                     context.lineTo(points[i].x, points[i].y);
                 context.fill();
-            },
-
-            // for clamping the player
-            clampCircle: function(centerX, centerY, radius) {
-                var minX = radius / WIDTH_TO_HEIGHT_RATIO;
-                var maxX = 1 - minX;
-
-                var x = PS.util.clamp(centerX, minX, maxX);
-                var y = PS.util.clamp(centerY, radius, 1 - radius);
-                return {x: x, y: y};
             },
         };
     };

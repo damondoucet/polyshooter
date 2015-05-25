@@ -14,7 +14,8 @@ $(function() {
 
     canvas.focus();
 
-    var renderer = PS.createRenderer(canvas);
+    var canvasWrapper = PS.createCanvasWrapper(canvas);
+    var renderer = PS.createRenderer(canvasWrapper);
     var input = PS.registerInput(canvas);
     PS.createGameManager(renderer, input);
 });
