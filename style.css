@@ -11,7 +11,7 @@ h1 {
     color: #333;
 }
 
-div#game-wrapper {
+div#game-wrapper, div#instructions {
     text-align: center;
 }
 
