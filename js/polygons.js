@@ -25,22 +25,21 @@ var PS = PS || {};
         return points;
     };
 
-    // Adapted from
-    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-    var pointInPolygon = function(points, x, y) {
-        var sides = points.length;
-        var c = false;
-        for (var i = 0, j = sides - 1; i < sides; j = i++) {
-            var sideXLength = points[j].x - points[i].x;
-            var sideYLength = points[j].y - points[i].y;
-            if ((x - points[i].x) * sideYLength < sideXLength * (y - points[i].y))
-                c = !c;
-        }
-        return c;
+    var sub = function(p1, p2) {
+        return {x: p1.x - p2.x, y: p1.y - p2.y};
     };
 
-    var pointInCircle = function(centerX, centerY, radius, x, y) {
-        return sqDist(centerX, centerY, x, y) <= radius * radius;
+    var dot = function(p1, p2) {
+        return p1.x * p2.x + p1.y * p2.y;
+    };
+
+    var magnitude = function(pt) {
+        return Math.sqrt(dot(pt, pt));
+    };
+
+    var unit = function(pt) {
+        var mag = 1.0 * magnitude(pt);
+        return {x: pt.x / mag, y: pt.y / mag};
     };
 
     PS.Polygons = {
@@ -49,18 +48,21 @@ var PS = PS || {};
         // circle: x, y, radius
         // polygon: x, y, orientation, radius, sides
         circlePolygonCollide: function(cX, cY, cR, pX, pY, pO, pR, pS) {
+            var circleCenter = {x: cX, y: cY},
+                polyCenter = {x: pX, y: pY};
+            var polyToCircle = sub(circleCenter, polyCenter);
+            var axis = unit(polyToCircle);
+
             var points = polygonPoints(pX, pY, pO, pR, pS);
+            var best = 0;
+            for (var i = 0, len = points.length; i < len; i++) {
+                var mag = dot(sub(points[i], polyCenter), axis);
+                if (mag > best)
+                    best = mag;
+            }
 
-            // does the polygon contain the circle's center?
-            if (pointInPolygon(pX, pY, pO, pR, pS, cX, cY))
-                return true;
-
-            // does the circle contain any of the polygon's points?
-            for (var i = 0, len = points.length; i < len; i++)
-                if (pointInCircle(cX, cY, cR, points[i].x, points[i].y))
-                    return true;
-
-            return false;
+            return !(magnitude(polyToCircle) > 0 &&
+                magnitude(polyToCircle) - best - cR > 0);
         }
     };
 })();
