@@ -24,13 +24,12 @@ var PS = PS || {};
             var percentPoints = PS.Polygons.polygonPoints(
                 centerX, centerY, orientation, radius, sides);
 
-            var points = [];
-            for (var i = 0, len = percentPoints.length; i < len; i++)
-                points.push({
-                    x: percentPoints[i].x * canvasWrapper.width(),
-                    y: percentPoints[i].y * canvasWrapper.height()
-                });
-            return points;
+            return _.map(percentPoints, function(pt) {
+                return {
+                    x: pt.x * canvasWrapper.width(),
+                    y: pt.y * canvasWrapper.height()
+                };
+            });
         };
 
         return {

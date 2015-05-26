@@ -50,14 +50,16 @@ var PS = PS || {};
             },
 
             update: function(deltaTime) {
-                for (var i = 0, len = objs.length; i < len; i++)
-                    objs[i].update(i, deltaTime);
+                $(objs).each(function(i, obj) {
+                    obj.update(i, deltaTime);
+                });
                 apply();
             },
 
             render: function() {
-                for (var i = 0, len = objs.length; i < len; i++)
-                    objs[i].render();
+                $(objs).each(function(_, obj) {
+                    obj.render();
+                });
             }
         };
     }

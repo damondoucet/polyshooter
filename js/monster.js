@@ -18,9 +18,9 @@ var PS = PS || {};
             var findCollidingBullet = function() {
                 var bullets = bulletManager.get();
                 for (var i = 0, len = bullets.length; i < len; i++) {
-                    var b = bullets[i];
+                    var bullet = bullets[i];
                     if (PS.Polygons.circlePolygonCollide(
-                            b.x(), b.y(), b.radius(),
+                            bullet.x(), bullet.y(), bullet.radius(),
                             centerX, centerY, angleToPlayer(), RADIUS, sides))
                         return i;
                 }

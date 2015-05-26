@@ -25,15 +25,13 @@ var PS = PS || {};
             radius: function() { return RADIUS; },
 
             handleKeys: function(keysDown, deltaTime) {
-                var keys = Object.keys(keysDown);
-                for (var i = 0, len = keys.length; i < len; i++) {
-                    var key = keys[i];
-                    if (keysDown[key]) {
+                $.each(keysDown, function(key, isDown) {
+                    if (isDown) {
                         var delta = KEY_TO_DELTA[key] || {x: 0, y: 0};
                         centerX += delta.x * deltaTime;
                         centerY += delta.y * deltaTime;
                     }
-                }
+                });
 
                 var center = renderer
                     .canvasWrapper()
