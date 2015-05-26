@@ -5,6 +5,7 @@ var PS = PS || {};
 // and monsters
 
 (function() {
+    var NUM_GAME_OVER_FRAMES = 3;
     var RADIUS = 0.08;
 
     PS.createMonsterFactory = function(
@@ -52,6 +53,8 @@ var PS = PS || {};
                     }
 
                     if (collidesWithPlayer()) {
+                        centerX += speed * Math.cos(angle) * NUM_GAME_OVER_FRAMES;
+                        centerY += speed * Math.sin(angle) * NUM_GAME_OVER_FRAMES;
                         PS.endGame();
                     }
                 },
