@@ -27,13 +27,13 @@ var PS = PS || {};
         var onClick = null;
         var keysDown = {};
 
-        $(canvas).mousedown(function(data) {
+        $(document).mousedown(function(data) {
             // We do this to avoid double click selecting text.
             canvas.focus();
             return false;
         });
 
-        $(canvas).click(function(data) {
+        $(document).click(function(data) {
             if (!onClick)
                 return;
 
@@ -50,7 +50,7 @@ var PS = PS || {};
             onClick(PS.util.clamp01(x), PS.util.clamp01(y));
         });
 
-        var keyDown = function(data) {
+        $(document).keydown(function(data) {
             var key = data.which || data.keyCode;
             if (key == TAB_KEY_CODE)
                 data.preventDefault();
@@ -59,21 +59,19 @@ var PS = PS || {};
 
             if (str !== "")
                 keysDown[str] = true;
-        }
 
-        var keyUp = function(data) {
+            return true;
+        });
+
+        $(document).keyup(function(data) {
             var key = data.which || data.keyCode;
             var str = String.fromCharCode(key).trim();
 
             if (str !== "")
                 keysDown[str] = false;
-        };
 
-        $(canvas).keydown(keyDown);
-        $(document).keydown(keyDown);
-
-        $(canvas).keyup(keyUp);
-        $(document).keyup(keyUp);
+            return true;
+        });
 
         return {
             getKeysDown: function() {

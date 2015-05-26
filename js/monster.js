@@ -1,9 +1,5 @@
 var PS = PS || {};
 
-// TODO(ddoucet): I could just do all collision checking here?
-// aka monsfact would get the gamestate, which exports player, bullets,
-// and monsters
-
 (function() {
     var NUM_GAME_OVER_FRAMES = 3;
     var RADIUS = 0.05;
@@ -11,7 +7,7 @@ var PS = PS || {};
     var MIN_SPEED = 0.001;
     var DIFFICULTY_TO_SPEED = 0.00001;
     var MIN_SIDES = 3;
-    var MAX_SIDES = 5;  // TODO(ddoucet): maybe more?
+    var MAX_SIDES = 5;
 
     PS.createMonsterFactory = function(
             player, bulletManager, monsterManager, renderer) {
@@ -66,9 +62,10 @@ var PS = PS || {};
                 },
 
                 render: function() {
-                    renderer.drawPolygon(
-                        centerX, centerY,
-                        angleToPlayer(), RADIUS, sides);
+                    if (sides >= 3)
+                        renderer.drawPolygon(
+                            centerX, centerY,
+                            angleToPlayer(), RADIUS, sides);
                 }
             };
         };
