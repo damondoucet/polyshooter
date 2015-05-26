@@ -50,7 +50,7 @@ var PS = PS || {};
             onClick(PS.util.clamp01(x), PS.util.clamp01(y));
         });
 
-        $(canvas).keydown(function(data) {
+        var keyDown = function(data) {
             var key = data.which || data.keyCode;
             if (key == TAB_KEY_CODE)
                 data.preventDefault();
@@ -59,15 +59,21 @@ var PS = PS || {};
 
             if (str !== "")
                 keysDown[str] = true;
-        });
+        }
 
-        $(canvas).keyup(function(data) {
+        var keyUp = function(data) {
             var key = data.which || data.keyCode;
             var str = String.fromCharCode(key).trim();
 
             if (str !== "")
                 keysDown[str] = false;
-        });
+        };
+
+        $(canvas).keydown(keyDown);
+        $(document).keydown(keyDown);
+
+        $(canvas).keyup(keyUp);
+        $(document).keyup(keyUp);
 
         return {
             getKeysDown: function() {

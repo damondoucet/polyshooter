@@ -16,6 +16,8 @@
 var PS = PS || {};
 
 (function() {
+    var X_PADDING = 10, Y_PADDING = 20;
+
     PS.createRenderer = function(canvasWrapper) {
         context = canvasWrapper.getContext();
 
@@ -65,6 +67,15 @@ var PS = PS || {};
                     context.lineTo(points[i].x, points[i].y);
                 context.closePath();
                 context.stroke();
+            },
+
+            writeTopRightCorner: function(str) {
+                context.font = "15px sans-serif";
+                var size = context.measureText(str);
+                var x = canvasWrapper.width() - size.width - X_PADDING,
+                    y = Y_PADDING;
+
+                context.fillText(str, x, y);
             },
         };
     };

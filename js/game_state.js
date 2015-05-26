@@ -6,6 +6,8 @@
 var PS = PS || {};
 
 (function() {
+    var MS_TO_DIFFICULTY_RATIO = 15;
+
     // Manages a set of objects for the game.
     // On any given frame, the set of objects is constant (so that there is no
     // confusion with iterating and removing). add() and remove() both store
@@ -74,21 +76,15 @@ var PS = PS || {};
         var player = PS.createPlayer(renderer, bulletFactory);
         var monsterFactory = PS.createMonsterFactory(player, bulletManager, monsterManager, renderer);
 
-        var tot = 0;
-        var prevtot = 0;
+        var difficulty = 0;
         return {
             player: player,
 
             update: function(deltaTime) {
-                tot += deltaTime;
-                if (tot > 1000 && prevtot < 1000)
-                    monsterFactory.create(3, 0.001, 0.1, 0.1);
-                else if (tot > 1500 && prevtot < 1500)
-                    monsterFactory.create(4, 0.002, 0.9, 0.1);
-                else if (tot > 2000 && prevtot < 2000)
-                    monsterFactory.create(5, 0.003, 0.9, 0.9);
-                prevtot = tot;
+                difficulty += deltaTime / MS_TO_DIFFICULTY_RATIO;
+                monsterFactory.setDifficulty(difficulty);
 
+                monsterFactory.update(deltaTime);
                 bulletManager.update(deltaTime);
                 monsterManager.update(deltaTime);
             },
@@ -98,6 +94,7 @@ var PS = PS || {};
                 bulletManager.render();
                 monsterManager.render();
                 player.render();
+                renderer.writeTopRightCorner(Math.floor(difficulty));
             }
         };
     };
