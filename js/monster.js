@@ -1,7 +1,7 @@
 var PS = PS || {};
 
 (function() {
-    var RADIUS = 0.05;
+    var RADIUS = 0.03;
     var FARTHEST_FROM_SCREEN = 0.1;
     var SPEED = 0.0003;
     var MIN_SIDES = 3;
@@ -71,16 +71,21 @@ var PS = PS || {};
             };
         };
 
-        // TODO(ddoucet):
-        var time = 0;
+        // TODO(ddoucet): this should technically evaluate whether it should
+        // spawn over a number of epochs and return the number of times that
+        // evaluated to true, but I'll assume that delta times are short enough
+        // for it to not matter here.
+        var currentTime = 0;
         var numSpawned = 0;
         var computeNumToSpawn = function(deltaTime) {
-            time += deltaTime;
-            if (numSpawned < time / 1000) {
-                numSpawned++;
-                return 1;
-            }
-            return 0;
+            currentTime += deltaTime;
+
+            // At 0 seconds, we want one monster per second
+            // At 10 seconds, we want 3 monsters per second
+            // Scales linearly
+            var monstersPerSec = 1 + 0.2 * currentTime / 1000;
+
+            return Math.random() < monstersPerSec * deltaTime / 1000;
         };
 
         var rand = function(min, max) {

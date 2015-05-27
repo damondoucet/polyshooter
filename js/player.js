@@ -5,7 +5,7 @@
 var PS = PS || {};
 
 (function() {
-    var RADIUS = 0.05;
+    var RADIUS = 0.03;
     var MOVEMENT = 0.001;
 
     var KEY_TO_DELTA = {
