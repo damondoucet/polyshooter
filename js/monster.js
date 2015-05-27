@@ -27,6 +27,9 @@ var PS = PS || {};
                 var bullets = bulletManager.get();
                 var indices = [];
                 for (var i = 0, len = bullets.length; i < len; i++) {
+                    if (bulletManager.hasBeenRemoved(i))
+                        continue;
+
                     var bullet = bullets[i];
                     if (PS.Polygons.circlePolygonCollide(
                             bullet.x(), bullet.y(), bullet.radius(),

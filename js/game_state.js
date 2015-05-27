@@ -51,6 +51,10 @@ var PS = PS || {};
                 removedIndices.push(index);
             },
 
+            hasBeenRemoved: function(index) {
+                return removedIndices.indexOf(index) !== -1;
+            },
+
             update: function(deltaTime) {
                 $(objs).each(function(i, obj) {
                     obj.update(i, deltaTime);
