@@ -11,8 +11,6 @@
  * sizes (e.g. radii) should be given as a percent of the height.
  */
 
-// TODO(ddoucet): should it be black on white or white on black?
-
 var PS = PS || {};
 
 (function() {

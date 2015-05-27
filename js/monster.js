@@ -1,10 +1,9 @@
 var PS = PS || {};
 
 (function() {
-    var NUM_GAME_OVER_FRAMES = 3;
     var RADIUS = 0.05;
     var FARTHEST_FROM_SCREEN = 0.1;
-    var MIN_SPEED = 0.001;
+    var MIN_SPEED = 0.003;
     var DIFFICULTY_TO_SPEED = 0.00001;
     var MIN_SIDES = 3;
     var MAX_SIDES = 5;
@@ -18,17 +17,18 @@ var PS = PS || {};
                 return Math.atan2(player.y() - centerY, player.x() - centerX);
             }
 
-            var findCollidingBullet = function() {
+            var findCollidingBullets = function() {
                 var bullets = bulletManager.get();
+                var indices = [];
                 for (var i = 0, len = bullets.length; i < len; i++) {
                     var bullet = bullets[i];
                     if (PS.Polygons.circlePolygonCollide(
                             bullet.x(), bullet.y(), bullet.radius(),
                             centerX, centerY, angleToPlayer(), RADIUS, sides))
-                        return i;
+                        indices.push(i);
                 }
 
-                return -1;
+                return indices;
             };
 
             var collidesWithPlayer = function() {
@@ -43,20 +43,22 @@ var PS = PS || {};
                     centerX += speed * Math.cos(angle);
                     centerY += speed * Math.sin(angle);
 
-                    var bulletIndex = findCollidingBullet();
-                    if (bulletIndex != -1) {
-                        bulletManager.remove(bulletIndex);
-                        sides--;
-
-                        if (sides < 3) {
-                            monsterManager.remove(monsterIndex);
-                            return;
+                    var bullets = findCollidingBullets();
+                    $(bullets).each(function(_, index) {
+                        if (sides >= 3) {
+                            bulletManager.remove(index);
+                            sides--;
                         }
+                    });
+
+                    if (sides < 3) {
+                        monsterManager.remove(monsterIndex);
+                        return;
                     }
 
                     if (collidesWithPlayer()) {
-                        centerX += speed * Math.cos(angle) * NUM_GAME_OVER_FRAMES;
-                        centerY += speed * Math.sin(angle) * NUM_GAME_OVER_FRAMES;
+                        centerX += speed * Math.cos(angle);
+                        centerY += speed * Math.sin(angle);
                         PS.endGame();
                     }
                 },
@@ -110,7 +112,7 @@ var PS = PS || {};
         var spawnMonster = function() {
             var sides = randomSides();
             var position = randomPosition();
-            var speed = Math.max(MIN_SPEED, difficulty * DIFFICULTY_TO_SPEED);
+            var speed = MIN_SPEED + difficulty * DIFFICULTY_TO_SPEED;
             monsterManager.add(
                 createMonster(sides, speed, position.x, position.y));
         };
