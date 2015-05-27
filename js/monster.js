@@ -7,8 +7,15 @@ var PS = PS || {};
     var MIN_SIDES = 3;
     var MAX_SIDES = 5;
 
+    var SIDES_TO_MIN_TIME = {
+        3: 0,
+        4: 3000,
+        5: 10000
+    };
+
     PS.createMonsterFactory = function(
             player, bulletManager, monsterManager, renderer) {
+        var currentTime = 0;
         var difficulty = 0;
 
         var createMonster = function(sides, speed, centerX, centerY) {
@@ -75,11 +82,8 @@ var PS = PS || {};
         // spawn over a number of epochs and return the number of times that
         // evaluated to true, but I'll assume that delta times are short enough
         // for it to not matter here.
-        var currentTime = 0;
         var numSpawned = 0;
         var computeNumToSpawn = function(deltaTime) {
-            currentTime += deltaTime;
-
             var monstersPerSec = 1 + 0.05 * currentTime / 1000;
             return Math.random() < monstersPerSec * deltaTime / 1000;
         };
@@ -105,7 +109,13 @@ var PS = PS || {};
         }
 
         var randomSides = function() {
-            return ~~rand(MIN_SIDES, MAX_SIDES + 1);
+            var generateSides = function() {
+                return ~~rand(MIN_SIDES, MAX_SIDES + 1);
+            };
+            var sides = generateSides();
+            while (SIDES_TO_MIN_TIME[sides] > currentTime)
+                sides = generateSides();
+            return sides;
         }
 
         var spawnMonster = function() {
@@ -123,6 +133,7 @@ var PS = PS || {};
             // Spawns a number of monsters based on the elapsed time since the
             // last spawning, and the current difficulty.
             update: function(deltaTime) {
+                currentTime += deltaTime;
                 var numMonsters = computeNumToSpawn(deltaTime);
                 for (var i = 0; i < numMonsters; i++)
                     spawnMonster();
