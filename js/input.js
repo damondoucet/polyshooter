@@ -26,16 +26,17 @@ var PS = PS || {};
     PS.registerInput = function(canvas) {
         var onClick = null;
         var keysDown = {};
+        var div = $(canvas).parent();
 
-        $(document).mousedown(function(data) {
+        $(div).mousedown(function(data) {
             // We do this to avoid double click selecting text.
             canvas.focus();
             return false;
         });
 
-        $(document).click(function(data) {
+        $(div).click(function(data) {
             if (!onClick)
-                return;
+                return true;
 
             data.preventDefault();
             if (data.which !== SINGLE_CLICK)
@@ -48,6 +49,11 @@ var PS = PS || {};
                 y = 1.0 * dy / canvas.height;
 
             onClick(PS.util.clamp01(x), PS.util.clamp01(y));
+            return true;
+        });
+
+        $("a").click(function() {
+            return true;
         });
 
         $(document).keydown(function(data) {

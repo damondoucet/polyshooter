@@ -6,9 +6,21 @@ body {
     background-color: #aaa;
 }
 
-h1 {
+h1, h2 {
     font-family: sans-serif;
+    text-align: center;
+}
+
+h1 {
     color: #333;
+    margin-bottom: 0px;
+}
+
+h2 {
+    margin-top: 0px;
+    color: #777;
+    font-style: italic;
+    font-size: 1.2em;
 }
 
 div#game-wrapper, div#instructions {
@@ -16,6 +28,7 @@ div#game-wrapper, div#instructions {
 }
 
 canvas#game {
+    margin: 3em;
     display: inline-block;
     background-color: white;
     border: #777 2px solid;
