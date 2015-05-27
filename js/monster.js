@@ -3,8 +3,8 @@ var PS = PS || {};
 (function() {
     var RADIUS = 0.05;
     var FARTHEST_FROM_SCREEN = 0.1;
-    var MIN_SPEED = 0.003;
-    var DIFFICULTY_TO_SPEED = 0.00001;
+    var MIN_SPEED = 0.007;
+    var DIFFICULTY_TO_SPEED = 0.000005;
     var MIN_SIDES = 3;
     var MAX_SIDES = 5;
 
