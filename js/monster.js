@@ -3,8 +3,7 @@ var PS = PS || {};
 (function() {
     var RADIUS = 0.05;
     var FARTHEST_FROM_SCREEN = 0.1;
-    var MIN_SPEED = 0.007;
-    var DIFFICULTY_TO_SPEED = 0.000005;
+    var SPEED = 0.0003;
     var MIN_SIDES = 3;
     var MAX_SIDES = 5;
 
@@ -40,8 +39,8 @@ var PS = PS || {};
             return {
                 update: function(monsterIndex, deltaTime) {
                     var angle = angleToPlayer();
-                    centerX += speed * Math.cos(angle);
-                    centerY += speed * Math.sin(angle);
+                    centerX += speed * Math.cos(angle) * deltaTime;
+                    centerY += speed * Math.sin(angle) * deltaTime;
 
                     var bullets = findCollidingBullets();
                     $(bullets).each(function(_, index) {
@@ -108,13 +107,11 @@ var PS = PS || {};
             return ~~rand(MIN_SIDES, MAX_SIDES + 1);
         }
 
-        // TODO(ddoucet): should speed be semi-random?
         var spawnMonster = function() {
             var sides = randomSides();
             var position = randomPosition();
-            var speed = MIN_SPEED + difficulty * DIFFICULTY_TO_SPEED;
             monsterManager.add(
-                createMonster(sides, speed, position.x, position.y));
+                createMonster(sides, SPEED, position.x, position.y));
         };
 
         return {

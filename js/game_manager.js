@@ -22,8 +22,6 @@ var PS = PS || {};
 
         input.setClickHandler(gameState.player.handleClick);
 
-        // TODO(ddoucet): right now it seems like there's a slight padding
-        // on the collision when it's game over.
         var gameLoop = function() {
             if (PS.gameOver)
                 return;
