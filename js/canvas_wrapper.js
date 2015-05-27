@@ -6,7 +6,6 @@ var PS = PS || {};
 
     PS.createCanvasWrapper = function(canvas) {
         context = canvas.getContext("2d");
-        context.fillStyle = "rgb(0,0,0)";
 
         var setCanvasSize = function(width, height) {
             $(canvas).width(width);
@@ -26,6 +25,7 @@ var PS = PS || {};
                 displayWidth = displayHeight * PS.WIDTH_TO_HEIGHT_RATIO;
 
             setCanvasSize(displayWidth, displayHeight);
+            context.lineWidth = 2;
         };
 
         return {
