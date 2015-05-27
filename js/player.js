@@ -51,7 +51,7 @@ var PS = PS || {};
             },
 
             render: function() {
-                renderer.fillCircle(centerX, centerY, RADIUS);
+                renderer.drawCircle(centerX, centerY, RADIUS);
             }
         };
     };

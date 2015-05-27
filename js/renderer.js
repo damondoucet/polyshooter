@@ -34,6 +34,21 @@ var PS = PS || {};
             });
         };
 
+        var makeCircle = function(centerX, centerY, radius, shouldFill) {
+            // adjust coordinates
+            centerX *= canvasWrapper.width();
+            centerY *= canvasWrapper.height();
+            radius *= canvasWrapper.height();
+
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, 2*Math.PI);
+
+            if (shouldFill)
+                context.fill();
+            else
+                context.stroke();
+        };
+
         return {
             canvasWrapper: function() { return canvasWrapper; },
 
@@ -44,15 +59,12 @@ var PS = PS || {};
                     canvasWrapper.height());
             },
 
-            fillCircle: function(centerX, centerY, radius) {
-                // adjust coordinates
-                centerX *= canvasWrapper.width();
-                centerY *= canvasWrapper.height();
-                radius *= canvasWrapper.height();
+            drawCircle: function(centerX, centerY, radius) {
+                makeCircle(centerX, centerY, radius, false);
+            },
 
-                context.beginPath();
-                context.arc(centerX, centerY, radius, 0, 2*Math.PI);
-                context.fill();
+            fillCircle: function(centerX, centerY, radius) {
+                makeCircle(centerX, centerY, radius, true);
             },
 
             // The first point is at angle orientation (standard trig)
