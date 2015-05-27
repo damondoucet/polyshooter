@@ -3,7 +3,7 @@ var PS = PS || {};
 (function() {
     var RADIUS = 0.03;
     var FARTHEST_FROM_SCREEN = 0.1;
-    var SPEED = 0.0003;
+    var SPEED = 0.000075;
     var MIN_SIDES = 3;
     var MAX_SIDES = 5;
 
@@ -80,11 +80,7 @@ var PS = PS || {};
         var computeNumToSpawn = function(deltaTime) {
             currentTime += deltaTime;
 
-            // At 0 seconds, we want one monster per second
-            // At 10 seconds, we want 3 monsters per second
-            // Scales linearly
-            var monstersPerSec = 1 + 0.2 * currentTime / 1000;
-
+            var monstersPerSec = 1 + 0.05 * currentTime / 1000;
             return Math.random() < monstersPerSec * deltaTime / 1000;
         };
 

@@ -81,6 +81,8 @@ var PS = PS || {};
             player: player,
 
             update: function(deltaTime) {
+                player.update(deltaTime);
+
                 difficulty += deltaTime / MS_TO_DIFFICULTY_RATIO;
                 monsterFactory.setDifficulty(difficulty);
 

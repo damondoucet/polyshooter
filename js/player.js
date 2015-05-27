@@ -6,18 +6,32 @@ var PS = PS || {};
 
 (function() {
     var RADIUS = 0.03;
-    var MOVEMENT = 0.001;
+    var SPEED = 0.0004;
+    var FRICTION = 0.000004;
 
-    var KEY_TO_DELTA = {
-        "W": {x: 0, y: -MOVEMENT},
-        "A": {x: -MOVEMENT, y: 0},
-        "S": {x: 0, y: MOVEMENT},
-        "D": {x: MOVEMENT, y: 0}
+    var KEY_TO_SPEED = {
+        "W": {x: 0, y: -SPEED},
+        "A": {x: -SPEED, y: 0},
+        "S": {x: 0, y: SPEED},
+        "D": {x: SPEED, y: 0}
     };
 
     PS.createPlayer = function(renderer, bulletFactory) {
         var centerX = 0.5,
             centerY = 0.5;
+
+        var xSpeed = 0.0,
+            ySpeed = 0.0;
+
+        var applyFriction = function(value, frictionAmount) {
+            var sign = Math.sign(value);
+
+            value -= sign * frictionAmount;
+            if (Math.sign(value) != sign)
+                value = 0;
+
+            return value;
+        };
 
         return PS.player = {
             x: function() { return centerX; },
@@ -27,17 +41,13 @@ var PS = PS || {};
             handleKeys: function(keysDown, deltaTime) {
                 $.each(keysDown, function(key, isDown) {
                     if (isDown) {
-                        var delta = KEY_TO_DELTA[key] || {x: 0, y: 0};
-                        centerX += delta.x * deltaTime;
-                        centerY += delta.y * deltaTime;
+                        var speed = KEY_TO_SPEED[key] || {x: 0, y: 0};
+                        if (speed.x !== 0)
+                            xSpeed = speed.x;
+                        if (speed.y !== 0)
+                            ySpeed = speed.y;
                     }
                 });
-
-                var center = renderer
-                    .canvasWrapper()
-                    .clampCircle(centerX, centerY, RADIUS);
-                centerX = center.x;
-                centerY = center.y;
             },
 
             handleClick: function(x, y) {
@@ -48,6 +58,26 @@ var PS = PS || {};
                     y = centerY + r * Math.sin(angle);
 
                 bulletFactory.createBullet(x, y, angle);
+            },
+
+            update: function(deltaTime) {
+                centerX += xSpeed * deltaTime;
+                centerY += ySpeed * deltaTime;
+
+                var center = renderer
+                    .canvasWrapper()
+                    .clampCircle(centerX, centerY, RADIUS);
+                if (centerX != center.x) {
+                    xSpeed = 0;
+                    centerX = center.x;
+                }
+                if (centerY != center.y) {
+                    ySpeed = 0;
+                    centerY = center.y;
+                }
+
+                xSpeed = applyFriction(xSpeed, FRICTION * deltaTime);
+                ySpeed = applyFriction(ySpeed, FRICTION * deltaTime);
             },
 
             render: function() {
