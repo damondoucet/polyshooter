@@ -45,6 +45,8 @@ var PS = PS || {};
 
         // circle: x, y, radius
         // polygon: x, y, orientation, radius, sides
+        // TODO(ddoucet): there's a bug here because this is testing circle
+        // collision, even though we're technically ellipses.
         circlePolygonCollide: function(cX, cY, cR, pX, pY, pO, pR, pS) {
             var circleCenter = {x: cX, y: cY},
                 polyCenter = {x: pX, y: pY};
