@@ -1,6 +1,8 @@
 var PS = PS || {};
 
 (function() {
+    var MAX_DELTA_ANGLE_PER_MS = Math.PI / 2000;
+
     var RADIUS = 0.03;
     var FARTHEST_FROM_SCREEN = 0.1;
     var SPEED = 0.000075;
@@ -19,9 +21,22 @@ var PS = PS || {};
         var difficulty = 0;
 
         var createMonster = function(sides, speed, centerX, centerY) {
+            var clampAngle = function(angle) {
+                while (angle < 0)
+                    angle += 2 * Math.PI;
+                while (angle > 2 * Math.PI)
+                    angle -= 2 * Math.PI;
+                return angle;
+            };
+
             var angleToPlayer = function() {
-                return Math.atan2(player.y() - centerY, player.x() - centerX);
+                var angle = Math.atan2(
+                    player.y() - centerY,
+                    player.x() - centerX);
+                return clampAngle(angle);
             }
+
+            var angle = angleToPlayer();
 
             var findCollidingBullets = function() {
                 var bullets = bulletManager.get();
@@ -33,7 +48,7 @@ var PS = PS || {};
                     var bullet = bullets[i];
                     if (PS.Polygons.circlePolygonCollide(
                             bullet.x(), bullet.y(), bullet.radius(),
-                            centerX, centerY, angleToPlayer(), RADIUS, sides))
+                            centerX, centerY, angle, RADIUS, sides))
                         indices.push(i);
                 }
 
@@ -43,12 +58,29 @@ var PS = PS || {};
             var collidesWithPlayer = function() {
                 return PS.Polygons.circlePolygonCollide(
                     player.x(), player.y(), player.radius() * 0.9,
-                    centerX, centerY, angleToPlayer(), RADIUS, sides);
+                    centerX, centerY, angle, RADIUS, sides);
+            };
+
+            // a1 - a2; 0 <= a1,a2 < 2pi
+            var subtractAngles = function(a1, a2) {
+                var res = clampAngle(a1 - a2);
+                if (res > Math.PI)
+                    res = -(2 * Math.PI - res);
+                return res;
+            };
+
+            var updateAngle = function(deltaTime) {
+                var fullDelta = subtractAngles(angleToPlayer(), angle);
+                var max = MAX_DELTA_ANGLE_PER_MS * deltaTime;
+                var deltaAngle = PS.util.clampSign(
+                    fullDelta, 0, max);
+                angle = clampAngle(angle + deltaAngle);
             };
 
             return {
                 update: function(monsterIndex, deltaTime) {
-                    var angle = angleToPlayer();
+                    updateAngle(deltaTime);
+
                     centerX += speed * Math.cos(angle) * deltaTime;
                     centerY += speed * Math.sin(angle) * deltaTime;
 
@@ -73,7 +105,7 @@ var PS = PS || {};
                     if (sides >= 3)
                         renderer.drawPolygon(
                             centerX, centerY,
-                            angleToPlayer(), RADIUS, sides);
+                            angle, RADIUS, sides);
                 }
             };
         };
