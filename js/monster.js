@@ -42,7 +42,7 @@ var PS = PS || {};
 
             var collidesWithPlayer = function() {
                 return PS.Polygons.circlePolygonCollide(
-                    player.x(), player.y(), player.radius(),
+                    player.x(), player.y(), player.radius() * 0.9,
                     centerX, centerY, angleToPlayer(), RADIUS, sides);
             };
 
@@ -65,11 +65,8 @@ var PS = PS || {};
                         return;
                     }
 
-                    if (collidesWithPlayer()) {
-                        centerX += speed * Math.cos(angle);
-                        centerY += speed * Math.sin(angle);
+                    if (collidesWithPlayer())
                         PS.endGame();
-                    }
                 },
 
                 render: function() {
@@ -92,10 +89,6 @@ var PS = PS || {};
                 return 1;
             }
 
-            // TODO(ddoucet): this should technically evaluate whether it
-            // should spawn over a number of epochs and return the number of
-            // times that evaluated to true, but I'll assume that delta times
-            // are short enough for it to not matter here.
             var monstersPerSec = 1 + 0.05 * currentTime / 1000;
             return Math.random() < monstersPerSec * deltaTime / 1000;
         };

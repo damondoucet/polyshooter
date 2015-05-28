@@ -28,7 +28,6 @@ var PS = PS || {};
         }
 
         var applyFriction = function(value, frictionAmount) {
-
             var valueSign = sign(value);
 
             value -= valueSign * frictionAmount;

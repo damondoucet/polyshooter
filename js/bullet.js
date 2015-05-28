@@ -7,9 +7,8 @@
 
 (function() {
     var RADIUS = 0.01;
-    var VELOCITY = 0.001;  // TODO(ddoucet)
+    var SPEED = 0.001;
 
-    // TODO(ddoucet): how to handle collisions? what is it checking against?
     PS.createBulletFactory = function(bulletManager, renderer) {
         return {
             radius: function() {
@@ -26,8 +25,8 @@
                     radius: function() { return RADIUS; },
 
                     update: function(bulletIndex, deltaTime) {
-                        centerX += xUnit * deltaTime * VELOCITY;
-                        centerY += yUnit * deltaTime * VELOCITY;
+                        centerX += xUnit * deltaTime * SPEED;
+                        centerY += yUnit * deltaTime * SPEED;
 
                         if (renderer.canvasWrapper().circleIsOutsideBounds(
                                 centerX, centerY, RADIUS)) {
