@@ -55,6 +55,9 @@ var PS = PS || {};
             },
 
             handleClick: function(x, y) {
+                if (PS.gameOver)
+                    return;
+
                 var r = (RADIUS + bulletFactory.radius()),
                     angle = Math.atan2(y - centerY, x - centerX);
 
