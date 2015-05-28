@@ -11,6 +11,10 @@ var PS = PS || {};
         return Math.max(min, Math.min(max, val));
     };
 
+    var sign = function(v) {
+        return v == 0 ? 0 : v / Math.abs(v);
+    }
+
     PS.util = {
         clamp: clamp,
         clamp01: function(val) {
@@ -18,6 +22,14 @@ var PS = PS || {};
         },
         sortInts: function(ints) {
             ints.sort(compare);
+        },
+
+        sign: sign,
+
+        clampSign: function(val, maxMagnitude) {
+            if (val < 0)
+                return Math.max(val, maxMagnitude);
+            return Math.min(val, maxMagnitude);
         }
     };
 })();

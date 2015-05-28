@@ -23,15 +23,11 @@ var PS = PS || {};
         var xSpeed = 0.0,
             ySpeed = 0.0;
 
-        var sign = function(v) {
-            return v == 0 ? 0 : v / Math.abs(v);
-        }
-
         var applyFriction = function(value, frictionAmount) {
-            var valueSign = sign(value);
+            var valueSign = PS.util.sign(value);
 
             value -= valueSign * frictionAmount;
-            if (sign(value) != valueSign)
+            if (PS.util.sign(value) != valueSign)
                 value = 0;
 
             return value;
