@@ -17,6 +17,7 @@ var PS = PS || {};
     var X_PADDING = 10, Y_PADDING = 20;
 
     PS.createRenderer = function(canvasWrapper) {
+        var PADDING_PERCENT = canvasWrapper.PADDING_PERCENT;
         context = canvasWrapper.getContext();
 
         var createPolygonPoints = function(
@@ -51,10 +52,18 @@ var PS = PS || {};
             canvasWrapper: function() { return canvasWrapper; },
 
             reset: function() {
+                var w = canvasWrapper.width(),
+                    h = canvasWrapper.height();
                 canvasWrapper.reset();
-                context.clearRect(0, 0,
-                    canvasWrapper.width(),
-                    canvasWrapper.height());
+                context.clearRect(0, 0, w, h);
+
+                context.strokeStyle = "#aaa";
+                context.strokeRect(
+                    PADDING_PERCENT * w,
+                    PADDING_PERCENT * h,
+                    (1 - 2 * PADDING_PERCENT) * w,
+                    (1 - 2 * PADDING_PERCENT) * h);
+                context.strokeStyle = "#000";
             },
 
             drawCircle: function(centerX, centerY, radius) {

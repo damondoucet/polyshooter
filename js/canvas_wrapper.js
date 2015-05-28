@@ -3,6 +3,7 @@ var PS = PS || {};
 (function() {
     PS.WIDTH_TO_HEIGHT_RATIO = 4.0/3;
     var WIDTH_FACTOR = 0.7, HEIGHT_FACTOR = 0.5;
+    var PADDING_PERCENT = 0.05;
 
     PS.createCanvasWrapper = function(canvas) {
         context = canvas.getContext("2d");
@@ -29,6 +30,8 @@ var PS = PS || {};
         };
 
         return {
+            PADDING_PERCENT: PADDING_PERCENT,
+
             width: function() { return canvas.width; },
             height: function() { return canvas.height; },
             getContext: function() { return context; },
@@ -36,11 +39,14 @@ var PS = PS || {};
 
             // for clamping the player
             clampCircle: function(centerX, centerY, radius) {
-                var minX = radius / PS.WIDTH_TO_HEIGHT_RATIO;
+                var minX = radius / PS.WIDTH_TO_HEIGHT_RATIO + PADDING_PERCENT;
                 var maxX = 1 - minX;
 
+                var minY = radius + PADDING_PERCENT;
+                var maxY = 1 - minY;
+
                 var x = PS.util.clamp(centerX, minX, maxX);
-                var y = PS.util.clamp(centerY, radius, 1 - radius);
+                var y = PS.util.clamp(centerY, minY, maxY);
                 return {x: x, y: y};
             },
 
