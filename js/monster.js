@@ -81,12 +81,21 @@ var PS = PS || {};
             };
         };
 
-        // TODO(ddoucet): this should technically evaluate whether it should
-        // spawn over a number of epochs and return the number of times that
-        // evaluated to true, but I'll assume that delta times are short enough
-        // for it to not matter here.
-        var numSpawned = 0;
+        // We want to spawn a few triangles early on to ease the player into
+        // the game.
+        var FIRST_SPAWN_TIMES = [200, 1000, 2000, 2500];
+        var firstSpawnIndex = 0;
         var computeNumToSpawn = function(deltaTime) {
+            if (firstSpawnIndex < FIRST_SPAWN_TIMES.length &&
+                    currentTime >= FIRST_SPAWN_TIMES[firstSpawnIndex]) {
+                firstSpawnIndex++;
+                return 1;
+            }
+
+            // TODO(ddoucet): this should technically evaluate whether it
+            // should spawn over a number of epochs and return the number of
+            // times that evaluated to true, but I'll assume that delta times
+            // are short enough for it to not matter here.
             var monstersPerSec = 1 + 0.05 * currentTime / 1000;
             return Math.random() < monstersPerSec * deltaTime / 1000;
         };
