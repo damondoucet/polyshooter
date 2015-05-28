@@ -1,8 +1,6 @@
 var PS = PS || {};
 
 (function() {
-    var MAX_DELTA_ANGLE_PER_MS = Math.PI / 1000;
-
     var RADIUS = 0.03;
     var FARTHEST_FROM_SCREEN = 0.1;
     var SPEED = 0.000075;
@@ -25,8 +23,6 @@ var PS = PS || {};
                 return Math.atan2(player.y() - centerY, player.x() - centerX);
             }
 
-            var angle = angleToPlayer();
-
             var findCollidingBullets = function() {
                 var bullets = bulletManager.get();
                 var indices = [];
@@ -37,7 +33,7 @@ var PS = PS || {};
                     var bullet = bullets[i];
                     if (PS.Polygons.circlePolygonCollide(
                             bullet.x(), bullet.y(), bullet.radius(),
-                            centerX, centerY, angle, RADIUS, sides))
+                            centerX, centerY, angleToPlayer(), RADIUS, sides))
                         indices.push(i);
                 }
 
@@ -47,16 +43,12 @@ var PS = PS || {};
             var collidesWithPlayer = function() {
                 return PS.Polygons.circlePolygonCollide(
                     player.x(), player.y(), player.radius() * 0.9,
-                    centerX, centerY, angle, RADIUS, sides);
+                    centerX, centerY, angleToPlayer(), RADIUS, sides);
             };
 
             return {
                 update: function(monsterIndex, deltaTime) {
-                    var max = MAX_DELTA_ANGLE_PER_MS * deltaTime;
-                    var deltaAngle = PS.util.clampSign(
-                        angleToPlayer() - angle, max);
-                    angle += deltaAngle;
-
+                    var angle = angleToPlayer();
                     centerX += speed * Math.cos(angle) * deltaTime;
                     centerY += speed * Math.sin(angle) * deltaTime;
 
@@ -81,7 +73,7 @@ var PS = PS || {};
                     if (sides >= 3)
                         renderer.drawPolygon(
                             centerX, centerY,
-                            angle, RADIUS, sides);
+                            angleToPlayer(), RADIUS, sides);
                 }
             };
         };
