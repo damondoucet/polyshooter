@@ -1,3 +1,10 @@
+/**
+ * Handles fetching and saving the high score, using local storage.
+ *
+ * It will remember the high score for the current session  even if local
+ * storage isn't present/enabled.
+ */
+
 var PS = PS || {};
 
 (function() {
