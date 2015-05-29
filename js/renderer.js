@@ -108,7 +108,7 @@ var PS = PS || {};
             },
 
             writeTopRightCorner: function(str) {
-                context.font = "1em sans-serif";
+                context.font = "1.1em Share Tech Mono";
                 var size = context.measureText(str);
                 var x = canvasWrapper.width() - size.width - X_PADDING,
                     y = Y_PADDING;
