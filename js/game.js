@@ -17,5 +17,12 @@ $(function() {
     var canvasWrapper = PS.createCanvasWrapper(canvas);
     var renderer = PS.createRenderer(canvasWrapper);
     var input = PS.registerInput(canvas);
+
+    input.addClickHandler(function() {
+        if (PS.gameOver) {
+            PS.gameOver = false;
+            PS.createGameManager(renderer, input);
+        }
+    });
     PS.createGameManager(renderer, input);
 });

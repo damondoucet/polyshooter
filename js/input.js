@@ -24,7 +24,7 @@ var PS = PS || {};
     var TAB_KEY_CODE = 9;
 
     PS.registerInput = function(canvas) {
-        var onClick = null;
+        var clickHandlers = {};
         var keysDown = {};
         var div = $(canvas).parent();
 
@@ -35,20 +35,21 @@ var PS = PS || {};
         });
 
         $(div).click(function(data) {
-            if (!onClick)
-                return true;
-
             data.preventDefault();
-            if (data.which !== SINGLE_CLICK)
-                return;
 
-            var dx = data.pageX - canvas.offsetLeft,
-                dy = data.pageY - canvas.offsetTop;
+            $.each(clickHandlers, function(_, onClick) {
+                if (data.which !== SINGLE_CLICK)
+                    return;
 
-            var x = 1.0 * dx / canvas.width,
-                y = 1.0 * dy / canvas.height;
+                var dx = data.pageX - canvas.offsetLeft,
+                    dy = data.pageY - canvas.offsetTop;
 
-            onClick(PS.util.clamp01(x), PS.util.clamp01(y));
+                var x = 1.0 * dx / canvas.width,
+                    y = 1.0 * dy / canvas.height;
+
+                onClick(PS.util.clamp01(x), PS.util.clamp01(y));
+            });
+
             return true;
         });
 
@@ -79,13 +80,21 @@ var PS = PS || {};
             return true;
         });
 
+        var id = 0;
         return {
             getKeysDown: function() {
                 return keysDown;
             },
 
-            setClickHandler: function(handler) {
-                onClick = handler;
+            // Returns the id of the click handler, which can be used to remove
+            // it later.
+            addClickHandler: function(handler) {
+                clickHandlers[id] = handler;
+                return id++;
+            },
+
+            removeClickHandler: function(id) {
+                delete clickHandlers[id];
             }
         };
     };

@@ -34,11 +34,13 @@ var PS = PS || {};
         var prevTime = null;
         gameState = PS.createGameState(renderer);
 
-        input.setClickHandler(gameState.player.handleClick);
+        var id = input.addClickHandler(gameState.player.handleClick);
 
         var gameLoop = function() {
-            if (PS.gameOver)
+            if (PS.gameOver) {
+                input.removeClickHandler(id);
                 return;
+            }
 
             var time = Date.now();
             if (!prevTime)
