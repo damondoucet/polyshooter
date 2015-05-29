@@ -30,11 +30,6 @@ h2 {
     font-size: 1.2em;
 }
 
-h3 {
-    margin: 0px;
-    font-size: 1em;
-}
-
 div#game-wrapper, div#instructions {
     text-align: center;
 }
