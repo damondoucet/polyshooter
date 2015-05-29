@@ -42,11 +42,14 @@ var PS = PS || {};
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, 2*Math.PI);
 
-            context.strokeStyle = color;
-            if (shouldFill)
+            if (shouldFill) {
+                context.fillStyle = color;
                 context.fill();
-            else
+            }
+            else {
+                context.strokeStyle = color;
                 context.stroke();
+            }
         };
 
         var SPLASH_FONT = "3em Share Tech Mono",
@@ -89,7 +92,8 @@ var PS = PS || {};
             },
 
             fillCircle: function(centerX, centerY, radius) {
-                makeCircle(centerX, centerY, radius, true, BLACK);
+                var color = PS.gameOver ? GRAY : BLACK;
+                makeCircle(centerX, centerY, radius, true, color);
             },
 
             // The first point is at angle orientation (standard trig)
@@ -117,6 +121,8 @@ var PS = PS || {};
             },
 
             writeSplash: function() {
+                context.fillStyle = BLACK;
+
                 var y = 0.3 * canvasWrapper.height();
                 var padding = 0.1 * canvasWrapper.height();
 
@@ -129,6 +135,8 @@ var PS = PS || {};
             },
 
             writeGameOver: function(score, isHighScore) {
+                context.fillStyle = BLACK;
+
                 var y = 0.3 * canvasWrapper.height();
                 var padding = 0.1 * canvasWrapper.height();
 
