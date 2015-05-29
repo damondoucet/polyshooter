@@ -6,7 +6,7 @@ body {
     background-color: #aaa;
 }
 
-h1, h2 {
+h1, h2, h3 {
     font-family: sans-serif;
     text-align: center;
 }
@@ -17,10 +17,15 @@ h1 {
 }
 
 h2 {
-    margin-top: 0px;
+    margin: 0px;
     color: #777;
     font-style: italic;
     font-size: 1.2em;
+}
+
+h3 {
+    margin: 0px;
+    font-size: 1em;
 }
 
 div#game-wrapper, div#instructions {
