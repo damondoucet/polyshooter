@@ -1,7 +1,7 @@
 var PS = PS || {};
 
 (function() {
-    PS.WIDTH_TO_HEIGHT_RATIO = 4.0/3;
+    PS.WIDTH_TO_HEIGHT_RATIO = 1.0;
     var WIDTH_FACTOR = 0.7, HEIGHT_FACTOR = 0.5;
     var PADDING_PERCENT = 0.025;
 

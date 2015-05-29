@@ -65,7 +65,7 @@ var PS = PS || {};
 
             var collidesWithPlayer = function() {
                 return PS.Polygons.circlePolygonCollide(
-                    player.x(), player.y(), player.radius() * 0.9,
+                    player.x(), player.y(), player.radius() * 0.85,
                     centerX, centerY, angle, RADIUS, sides);
             };
 
@@ -182,6 +182,7 @@ var PS = PS || {};
             // last spawning, and the current difficulty.
             update: function(deltaTime) {
                 currentTime += deltaTime;
+
                 var numMonsters = computeNumToSpawn(deltaTime);
                 for (var i = 0; i < numMonsters; i++)
                     spawnMonster();
