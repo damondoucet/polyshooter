@@ -49,6 +49,14 @@ var PS = PS || {};
                 context.stroke();
         };
 
+        var writeLine = function(y, str, lineHeight) {
+            var size = context.measureText(str);
+            var x = (canvasWrapper.width() - size.width) / 2;
+            context.fillText(str, x, y);
+            y += lineHeight;
+            return y;
+        };
+
         var BLACK = "#000",
             GRAY = "#aaa",
             RED = "#a00";
@@ -97,13 +105,34 @@ var PS = PS || {};
             },
 
             writeTopRightCorner: function(str) {
-                context.font = "15px sans-serif";
+                context.font = "1em sans-serif";
                 var size = context.measureText(str);
                 var x = canvasWrapper.width() - size.width - X_PADDING,
                     y = Y_PADDING;
 
                 context.fillText(str, x, y);
             },
+
+            writeMenu: function() {
+                // var y = 0.3 * canvasWrapper
+            },
+
+            writeGameOver: function(score, isHighScore) {
+                var y = 0.3 * canvasWrapper.height();
+                var padding = 0.1 * canvasWrapper.height();
+
+                context.font = "3em sans-serif";
+                y = writeLine(y, "Game Over", padding);
+
+                context.font = "1.2em sans-serif";
+                var scoreMessage = "Score: " + score;
+                if (isHighScore)
+                    scoreMessage += " (High Score!)";
+
+                y = writeLine(y, scoreMessage, padding / 2);
+                y = writeLine(y, "High Score: " + PS.HighScore.get(), padding);
+                y = writeLine(y, "Click anywhere to play again", 0);
+            }
         };
     };
 })();

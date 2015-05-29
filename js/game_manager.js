@@ -10,8 +10,6 @@ var PS = PS || {};
 (function() {
     PS.gameOver = false;
 
-    var gameState = null;
-
     var isHighScore = function(score) {
         var highScore = PS.HighScore.get();
         return !highScore || score > highScore;
@@ -19,26 +17,37 @@ var PS = PS || {};
 
     PS.endGame = function() {
         PS.gameOver = true;
+        PS.gameOverTime = Date.now();
 
         console.log("game over!");
-        var score = gameState.getScore();
+    };
+
+    // Returns whether the score is the new high score
+    var handleHighScore = function(score) {
         if (isHighScore(score)) {
             PS.HighScore.set(score);
             console.log("New high score! " + score);
+            return true;
         }
-    };
+        return false;
+    }
 
     PS.createGameManager = function(renderer, input) {
         PS.gameOver = false;
 
         var prevTime = null;
-        gameState = PS.createGameState(renderer);
+        var gameState = PS.createGameState(renderer);
 
         var id = input.addClickHandler(gameState.player.handleClick);
 
         var gameLoop = function() {
             if (PS.gameOver) {
                 input.removeClickHandler(id);
+                gameState.render();
+
+                var score = Math.floor(gameState.getScore());
+                var isHigh = handleHighScore(score);
+                renderer.writeGameOver(score, isHigh);
                 return;
             }
 

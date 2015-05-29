@@ -19,7 +19,7 @@ $(function() {
     var input = PS.registerInput(canvas);
 
     input.addClickHandler(function() {
-        if (PS.gameOver) {
+        if (PS.gameOver && Date.now() - PS.gameOverTime > 1000) {
             PS.gameOver = false;
             PS.createGameManager(renderer, input);
         }
