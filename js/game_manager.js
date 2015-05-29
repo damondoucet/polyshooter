@@ -8,7 +8,8 @@
 var PS = PS || {};
 
 (function() {
-    PS.gameOver = false;
+    PS.gameOver = true;
+    PS.gameOverTime = 0;
 
     var isHighScore = function(score) {
         var highScore = PS.HighScore.get();
@@ -18,15 +19,12 @@ var PS = PS || {};
     PS.endGame = function() {
         PS.gameOver = true;
         PS.gameOverTime = Date.now();
-
-        console.log("game over!");
     };
 
     // Returns whether the score is the new high score
     var handleHighScore = function(score) {
         if (isHighScore(score)) {
             PS.HighScore.set(score);
-            console.log("New high score! " + score);
             return true;
         }
         return false;

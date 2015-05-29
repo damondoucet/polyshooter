@@ -15,8 +15,6 @@
  *          canvas).
  */
 
-// TODO(ddoucet): handle holding mouse button
-
 var PS = PS || {};
 
 (function() {

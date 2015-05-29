@@ -24,5 +24,7 @@ $(function() {
             PS.createGameManager(renderer, input);
         }
     });
-    PS.createGameManager(renderer, input);
+
+    renderer.reset();
+    renderer.writeSplash();
 });

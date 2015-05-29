@@ -49,6 +49,8 @@ var PS = PS || {};
                 context.stroke();
         };
 
+        var SPLASH_FONT = "3em sans-serif",
+            SUBTEXT_FONT = "1.2em sans-serif";
         var writeLine = function(y, str, lineHeight) {
             var size = context.measureText(str);
             var x = (canvasWrapper.width() - size.width) / 2;
@@ -67,9 +69,9 @@ var PS = PS || {};
             canvasWrapper: function() { return canvasWrapper; },
 
             reset: function() {
+                canvasWrapper.reset();
                 var w = canvasWrapper.width(),
                     h = canvasWrapper.height();
-                canvasWrapper.reset();
                 context.clearRect(0, 0, w, h);
 
                 context.strokeStyle = GRAY;
@@ -113,25 +115,33 @@ var PS = PS || {};
                 context.fillText(str, x, y);
             },
 
-            writeMenu: function() {
-                // var y = 0.3 * canvasWrapper
+            writeSplash: function() {
+                var y = 0.3 * canvasWrapper.height();
+                var padding = 0.1 * canvasWrapper.height();
+
+                context.font = SPLASH_FONT;
+                y = writeLine(y, "PolyShooter", padding);
+
+                context.font = SUBTEXT_FONT;
+                y = writeLine(y, "WASD to move, click to shoot", padding / 2);
+                y = writeLine(y, "click anywhere to begin", 0);
             },
 
             writeGameOver: function(score, isHighScore) {
                 var y = 0.3 * canvasWrapper.height();
                 var padding = 0.1 * canvasWrapper.height();
 
-                context.font = "3em sans-serif";
+                context.font = SPLASH_FONT;
                 y = writeLine(y, "Game Over", padding);
 
-                context.font = "1.2em sans-serif";
+                context.font = SUBTEXT_FONT;
                 var scoreMessage = "Score: " + score;
                 if (isHighScore)
                     scoreMessage += " (High Score!)";
 
                 y = writeLine(y, scoreMessage, padding / 2);
                 y = writeLine(y, "High Score: " + PS.HighScore.get(), padding);
-                y = writeLine(y, "Click anywhere to play again", 0);
+                y = writeLine(y, "click anywhere to play again", 0);
             }
         };
     };
