@@ -84,7 +84,9 @@ var PS = PS || {};
             },
 
             render: function() {
-                renderer.drawCircle(centerX, centerY, RADIUS);
+                renderer.drawCircle(
+                    centerX, centerY, RADIUS,
+                    PS.gameOver ? renderer.RED : renderer.BLACK);
             }
         };
     };

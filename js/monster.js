@@ -21,6 +21,8 @@ var PS = PS || {};
         var difficulty = 0;
 
         var createMonster = function(sides, speed, centerX, centerY) {
+            var killedPlayer = false;
+
             var clampAngle = function(angle) {
                 while (angle < 0)
                     angle += 2 * Math.PI;
@@ -97,15 +99,18 @@ var PS = PS || {};
                         return;
                     }
 
-                    if (collidesWithPlayer())
+                    if (collidesWithPlayer()) {
+                        killedPlayer = true;
                         PS.endGame();
+                    }
                 },
 
                 render: function() {
                     if (sides >= 3)
                         renderer.drawPolygon(
                             centerX, centerY,
-                            angle, RADIUS, sides);
+                            angle, RADIUS, sides,
+                            killedPlayer ? renderer.RED : renderer.BLACK);
                 }
             };
         };

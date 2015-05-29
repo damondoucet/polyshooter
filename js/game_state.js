@@ -84,6 +84,10 @@ var PS = PS || {};
         return {
             player: player,
 
+            getScore: function() {
+                return difficulty;
+            },
+
             update: function(deltaTime) {
                 player.update(deltaTime);
 

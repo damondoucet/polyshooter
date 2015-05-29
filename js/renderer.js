@@ -33,7 +33,7 @@ var PS = PS || {};
             });
         };
 
-        var makeCircle = function(centerX, centerY, radius, shouldFill) {
+        var makeCircle = function(centerX, centerY, radius, shouldFill, color) {
             // adjust coordinates
             centerX *= canvasWrapper.width();
             centerY *= canvasWrapper.height();
@@ -42,13 +42,20 @@ var PS = PS || {};
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, 2*Math.PI);
 
+            context.strokeStyle = color;
             if (shouldFill)
                 context.fill();
             else
                 context.stroke();
         };
 
+        var BLACK = "#000",
+            GRAY = "#aaa",
+            RED = "#a00";
         return {
+            BLACK: BLACK,
+            RED: RED,
+
             canvasWrapper: function() { return canvasWrapper; },
 
             reset: function() {
@@ -57,29 +64,30 @@ var PS = PS || {};
                 canvasWrapper.reset();
                 context.clearRect(0, 0, w, h);
 
-                context.strokeStyle = "#aaa";
+                context.strokeStyle = GRAY;
                 context.strokeRect(
                     PADDING_PERCENT * w,
                     PADDING_PERCENT * h,
                     (1 - 2 * PADDING_PERCENT) * w,
                     (1 - 2 * PADDING_PERCENT) * h);
-                context.strokeStyle = "#000";
+                context.strokeStyle = BLACK;
             },
 
-            drawCircle: function(centerX, centerY, radius) {
-                makeCircle(centerX, centerY, radius, false);
+            drawCircle: function(centerX, centerY, radius, color) {
+                makeCircle(centerX, centerY, radius, false, color);
             },
 
             fillCircle: function(centerX, centerY, radius) {
-                makeCircle(centerX, centerY, radius, true);
+                makeCircle(centerX, centerY, radius, true, BLACK);
             },
 
             // The first point is at angle orientation (standard trig)
             drawPolygon: function(centerX, centerY,
-                    orientation, radius, sides) {
+                    orientation, radius, sides, color) {
                 var points = createPolygonPoints(
                     centerX, centerY, orientation, radius, sides);
 
+                context.strokeStyle = color;
                 context.beginPath();
                 context.moveTo(points[0].x, points[0].y);
                 for (var i = 1, len = sides; i < len; i++)
