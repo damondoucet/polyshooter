@@ -1,3 +1,10 @@
+#force-font-preload {
+    font-family: 'Share Tech Mono';
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
 html, body {
     margin: 0px;
 }

@@ -49,8 +49,8 @@ var PS = PS || {};
                 context.stroke();
         };
 
-        var SPLASH_FONT = "3em sans-serif",
-            SUBTEXT_FONT = "1.2em sans-serif";
+        var SPLASH_FONT = "3em Share Tech Mono",
+            SUBTEXT_FONT = "1.2em Share Tech Mono";
         var writeLine = function(y, str, lineHeight) {
             var size = context.measureText(str);
             var x = (canvasWrapper.width() - size.width) / 2;
@@ -120,7 +120,7 @@ var PS = PS || {};
                 var padding = 0.1 * canvasWrapper.height();
 
                 context.font = SPLASH_FONT;
-                y = writeLine(y, "PolyShooter", padding);
+                y = writeLine(y, "polyshooter", padding);
 
                 context.font = SUBTEXT_FONT;
                 y = writeLine(y, "WASD to move, click to shoot", padding / 2);
@@ -132,15 +132,15 @@ var PS = PS || {};
                 var padding = 0.1 * canvasWrapper.height();
 
                 context.font = SPLASH_FONT;
-                y = writeLine(y, "Game Over", padding);
+                y = writeLine(y, "game over", padding);
 
                 context.font = SUBTEXT_FONT;
-                var scoreMessage = "Score: " + score;
+                var scoreMessage = "score: " + score;
                 if (isHighScore)
-                    scoreMessage += " (High Score!)";
+                    scoreMessage += " (high score!)";
 
                 y = writeLine(y, scoreMessage, padding / 2);
-                y = writeLine(y, "High Score: " + PS.HighScore.get(), padding);
+                y = writeLine(y, "high score: " + PS.HighScore.get(), padding);
                 y = writeLine(y, "click anywhere to play again", 0);
             }
         };

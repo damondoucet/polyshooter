@@ -5,7 +5,7 @@
 
 var PS = PS || {};
 
-$(function() {
+$(window).load(function() {
     var canvas = document.getElementById('game');
     if (!canvas.getContext) {
         console.log("Unsupported browser!");
