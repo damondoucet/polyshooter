@@ -23,6 +23,12 @@ var PS = PS || {};
         var createMonster = function(sides, speed, centerX, centerY) {
             var killedPlayer = false;
 
+            var getColor = function() {
+                if (PS.gameOver)
+                    return killedPlayer ? renderer.RED : renderer.GRAY;
+                return renderer.BLACK;
+            };
+
             var clampAngle = function(angle) {
                 while (angle < 0)
                     angle += 2 * Math.PI;
@@ -110,7 +116,7 @@ var PS = PS || {};
                         renderer.drawPolygon(
                             centerX, centerY,
                             angle, RADIUS, sides,
-                            killedPlayer ? renderer.RED : renderer.BLACK);
+                            getColor());
                 }
             };
         };

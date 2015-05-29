@@ -50,7 +50,7 @@ var PS = PS || {};
         };
 
         var SPLASH_FONT = "3em Share Tech Mono",
-            SUBTEXT_FONT = "1.2em Share Tech Mono";
+            SUBTEXT_FONT = "1.5em Share Tech Mono";
         var writeLine = function(y, str, lineHeight) {
             var size = context.measureText(str);
             var x = (canvasWrapper.width() - size.width) / 2;
@@ -60,10 +60,11 @@ var PS = PS || {};
         };
 
         var BLACK = "#000",
-            GRAY = "#aaa",
+            GRAY = "#ccc",
             RED = "#a00";
         return {
             BLACK: BLACK,
+            GRAY: GRAY,
             RED: RED,
 
             canvasWrapper: function() { return canvasWrapper; },
