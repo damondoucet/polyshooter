@@ -26,5 +26,5 @@ $(window).load(function() {
     });
 
     renderer.reset();
-    renderer.writeSplash();
+    PS.createWriter(renderer).writeSplash();
 });

@@ -14,8 +14,6 @@
 var PS = PS || {};
 
 (function() {
-    var X_PADDING = 10, Y_PADDING = 20;
-
     PS.createRenderer = function(canvasWrapper) {
         var PADDING_PERCENT = canvasWrapper.PADDING_PERCENT;
         context = canvasWrapper.getContext();
@@ -50,16 +48,6 @@ var PS = PS || {};
                 context.strokeStyle = color;
                 context.stroke();
             }
-        };
-
-        var SPLASH_FONT = "3em Share Tech Mono",
-            SUBTEXT_FONT = "1.5em Share Tech Mono";
-        var writeLine = function(y, str, lineHeight) {
-            var size = context.measureText(str);
-            var x = (canvasWrapper.width() - size.width) / 2;
-            context.fillText(str, x, y);
-            y += lineHeight;
-            return y;
         };
 
         var BLACK = "#000",
@@ -110,48 +98,6 @@ var PS = PS || {};
                 context.closePath();
                 context.stroke();
             },
-
-            writeTopRightCorner: function(str) {
-                context.font = "1.1em Share Tech Mono";
-                var size = context.measureText(str);
-                var x = canvasWrapper.width() - size.width - X_PADDING,
-                    y = Y_PADDING;
-
-                context.fillText(str, x, y);
-            },
-
-            writeSplash: function() {
-                context.fillStyle = BLACK;
-
-                var y = 0.3 * canvasWrapper.height();
-                var padding = 0.1 * canvasWrapper.height();
-
-                context.font = SPLASH_FONT;
-                y = writeLine(y, "polyshooter", padding);
-
-                context.font = SUBTEXT_FONT;
-                y = writeLine(y, "WASD to move, click to shoot", padding / 2);
-                y = writeLine(y, "click anywhere to begin", 0);
-            },
-
-            writeGameOver: function(score, isHighScore) {
-                context.fillStyle = BLACK;
-
-                var y = 0.3 * canvasWrapper.height();
-                var padding = 0.1 * canvasWrapper.height();
-
-                context.font = SPLASH_FONT;
-                y = writeLine(y, "game over", padding);
-
-                context.font = SUBTEXT_FONT;
-                var scoreMessage = "score: " + score;
-                if (isHighScore)
-                    scoreMessage += " (high score!)";
-
-                y = writeLine(y, scoreMessage, padding / 2);
-                y = writeLine(y, "high score: " + PS.HighScore.get(), padding);
-                y = writeLine(y, "click anywhere to play again", 0);
-            }
         };
     };
 })();

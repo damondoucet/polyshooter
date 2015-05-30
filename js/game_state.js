@@ -81,6 +81,7 @@ var PS = PS || {};
         var monsterFactory = PS.createMonsterFactory(player, bulletManager, monsterManager, renderer);
 
         var difficulty = 0;
+        var writer = PS.createWriter(renderer);
         return {
             player: player,
 
@@ -104,7 +105,7 @@ var PS = PS || {};
                 bulletManager.render();
                 monsterManager.render();
                 player.render();
-                renderer.writeTopRightCorner(Math.floor(difficulty));
+                writer.writeTopRightCorner(Math.floor(difficulty));
             }
         };
     };

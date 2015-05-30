@@ -45,7 +45,7 @@ var PS = PS || {};
 
                 var score = Math.floor(gameState.getScore());
                 var isHigh = handleHighScore(score);
-                renderer.writeGameOver(score, isHigh);
+                PS.createWriter(renderer).writeGameOver(score, isHigh);
                 return;
             }
 
