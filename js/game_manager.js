@@ -45,6 +45,10 @@ var PS = PS || {};
 
                 var score = Math.floor(gameState.getScore());
                 var isHigh = handleHighScore(score);
+
+                // The game manager is what forces redraws, so we only have do
+                // this once (and don't need to worry about resets clearing
+                // it).
                 PS.createWriter(renderer).writeGameOver(score, isHigh);
                 return;
             }
